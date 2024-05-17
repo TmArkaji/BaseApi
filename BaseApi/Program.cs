@@ -1,3 +1,4 @@
+using BaseApi.Configurations.ExceptionsHandler;
 using BaseApi.Data;
 using BaseApi.Interfaces;
 using BaseApi.Repositories;
@@ -57,7 +58,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add Generic Repository
 builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
-builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IBrandsRepository, BrandsRepository>();
 builder.Services.AddScoped<IStatusesRepository, StatusesRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -99,10 +100,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();

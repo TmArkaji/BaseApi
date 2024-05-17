@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using BaseApi.Configurations;
+using BaseApi.Configurations.ExceptionsHandler;
 
 namespace BaseApi.Repositories
 {
@@ -30,7 +31,12 @@ namespace BaseApi.Repositories
 
         public virtual async Task<TModel> GetByIdAsync(TKey id)
         {
-            return await _context.Set<TModel>().FindAsync(id);
+            var entity = await _context.Set<TModel>().FindAsync(id);
+            if (entity == null)
+            {
+                throw new NotFoundException($"Entity with id {id} was not found.");
+            }
+            return entity;
         }
 
         public virtual async Task<TModel> CreateAsync(TModel entity)

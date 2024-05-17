@@ -12,7 +12,7 @@ namespace BaseApi.Controllers
     [Authorize]
     public class BrandsController : GenericController<int, Brand, BrandDto>
     {
-        public BrandsController(IBrandRepository repository, IMapper mapper)
+        public BrandsController(IBrandsRepository repository, IMapper mapper)
             : base(repository, mapper)
         {
         }
