@@ -58,6 +58,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add Generic Repository
 builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+builder.Services.AddScoped<IApiUserLoginRepository, ApiUserLoginRepository>();
+builder.Services.AddScoped<IApiUserRepository, ApiUserRepository>();
 builder.Services.AddScoped<IBrandsRepository, BrandsRepository>();
 builder.Services.AddScoped<IStatusesRepository, StatusesRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -1,4 +1,5 @@
-﻿using BaseApi.DTOs;
+﻿using BaseApi.Data;
+using BaseApi.DTOs;
 using BaseApi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -15,11 +16,13 @@ namespace BaseApi.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IApiUserRepository _apiUserRepository;
+        private readonly IApiUserLoginRepository _apiUserLoginRepository;
 
-        public AuthController(IConfiguration configuration, IApiUserRepository apiUserRepository)
+        public AuthController(IConfiguration configuration, IApiUserRepository apiUserRepository, IApiUserLoginRepository apiUserLoginRepository)
         {
             _configuration = configuration;
             _apiUserRepository = apiUserRepository;
+            _apiUserLoginRepository = apiUserLoginRepository;
         }
 
         [HttpPost("login")]
@@ -39,13 +42,24 @@ namespace BaseApi.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, user.UserName)
+                    new Claim(ClaimTypes.NameIdentifier, user.ID)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
+
+            // Registrar el inicio de sesión
+            var userLoginRecord = new ApiUserLogin
+            {
+                ApiUserId = user.ID,
+                Token = tokenString,
+                TokenStart = DateTime.UtcNow,
+                TokenEnd = DateTime.UtcNow.AddHours(1)
+            };
+
+            await _apiUserLoginRepository.LogUserLoginAsync(userLoginRecord);
 
             return Ok(new { Token = tokenString });
         }

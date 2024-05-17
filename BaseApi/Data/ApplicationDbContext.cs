@@ -9,6 +9,7 @@ namespace BaseApi.Data
         }
 
         public DbSet<ApiUser> ApiUsers { get; set; }
+        public DbSet<ApiUserLogin> ApiUserLogins { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Status> Statuses { get; set; }
 
