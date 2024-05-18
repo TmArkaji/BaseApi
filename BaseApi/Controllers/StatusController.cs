@@ -10,9 +10,9 @@ namespace BaseApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class StatusesController : GenericController<int, Status, StatusDto>
+    public class StatusController : GenericController<int, Status, StatusDto>
     {
-        public StatusesController(IStatusesRepository repository, IMapper mapper)
+        public StatusController(IStatusRepository repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

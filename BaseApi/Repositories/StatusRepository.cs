@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace BaseApi.Repositories
 {
-    public class StatusesRepository : GenericRepository<int, Status>, IStatusesRepository
+    public class StatusRepository : GenericRepository<int, Status>, IStatusRepository
     {
-        public StatusesRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ILogger<StatusesRepository> logger)
+        public StatusRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ILogger<StatusRepository> logger)
             : base(context, httpContextAccessor, logger)
         {
         }

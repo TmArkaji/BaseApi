@@ -25,7 +25,7 @@ namespace BaseApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TDto>>> GetAll()
+        public virtual async Task<ActionResult<IEnumerable<TDto>>> GetAll()
         {
             var entities = await _repository.GetAllAsync();
             var dtos = _mapper.Map<List<TDto>>(entities);
@@ -33,7 +33,7 @@ namespace BaseApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TDto>> Get(TKey id)
+        public virtual async Task<ActionResult<TDto>> Get(TKey id)
         {
             var entity = await _repository.GetByIdAsync(id);
 
@@ -47,7 +47,7 @@ namespace BaseApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TDto>> Create(TDto dto)
+        public virtual async Task<ActionResult<TDto>> Create(TDto dto)
         {
             var entity = _mapper.Map<TModel>(dto);
             entity = await _repository.CreateAsync(entity);
@@ -57,7 +57,7 @@ namespace BaseApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(TKey id, TDto dto)
+        public virtual async Task<IActionResult> Update(TKey id, TDto dto)
         {
             var entity = _mapper.Map<TModel>(dto);
             entity.ID = id;
@@ -67,7 +67,7 @@ namespace BaseApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(TKey id)
+        public virtual async Task<IActionResult> Delete(TKey id)
         {
             await _repository.DeleteAsync(id);
             return NoContent();
