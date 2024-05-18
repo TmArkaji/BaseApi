@@ -14,5 +14,6 @@ namespace BaseApi.Interfaces
         Task DeleteAsync(TKey id);
         Task<bool> Exist(TKey id);
         public DateTime GetDateTime();
+        public string GetPropertyName<T>(Expression<Func<T>> propertyExpression);
     }
 }

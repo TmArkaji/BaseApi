@@ -13,8 +13,16 @@
 
     public class ValidationException : Exception
     {
-        public ValidationException(string message) : base(message)
+        public List<string> Errors { get; }
+
+        public ValidationException() : base("Validation failed")
         {
+            Errors = new List<string>();
+        }
+
+        public ValidationException(IEnumerable<string> errors) : this()
+        {
+            Errors.AddRange(errors);
         }
     }
 

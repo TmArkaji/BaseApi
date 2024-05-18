@@ -15,8 +15,8 @@ namespace BaseApi.Controllers
         where TModel : BaseEntity<TKey>
         where TDto : class
     {
-        private readonly IGenericRepository<TKey, TModel> _repository;
-        private readonly IMapper _mapper;
+        protected readonly IGenericRepository<TKey, TModel> _repository;
+        protected readonly IMapper _mapper;
 
         public GenericController(IGenericRepository<TKey, TModel> repository, IMapper mapper)
         {

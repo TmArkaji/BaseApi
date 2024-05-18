@@ -21,7 +21,8 @@ namespace BaseApi.Repositories
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-            _userId = (_httpContextAccessor.HttpContext == null) ? "null" : _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value ?? ApiConstants.ANONYMOUSE_USER_ID;
+
+            _userId = (_httpContextAccessor.HttpContext == null) ? "null" : (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated ? _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value : ApiConstants.ANONYMOUSE_USER_ID);
         }
 
         public virtual async Task<List<TModel>> GetAllAsync()
@@ -137,6 +138,15 @@ namespace BaseApi.Repositories
         public virtual async Task<TModel> GetByIdAsync(Expression<Func<TModel, bool>> predicate)
         {
             return await _context.Set<TModel>().FirstOrDefaultAsync(predicate);
+        }
+
+        public string GetPropertyName<T>(Expression<Func<T>> propertyExpression)
+        {
+            if (propertyExpression.Body is MemberExpression memberExpression)
+            {
+                return memberExpression.Member.Name;
+            }
+            throw new ArgumentException("Invalid property expression");
         }
     }
 }

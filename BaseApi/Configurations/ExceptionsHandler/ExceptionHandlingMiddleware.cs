@@ -12,11 +12,13 @@ namespace BaseApi.Configurations.ExceptionsHandler
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        private readonly IWebHostEnvironment _env;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger, IWebHostEnvironment env)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -48,8 +50,10 @@ namespace BaseApi.Configurations.ExceptionsHandler
             var result = new
             {
                 StatusCode = response.StatusCode,
-                Message = exception.Message, // Consider removing this in production
-                Detailed = exception.StackTrace // Consider removing this in production
+                Message = exception.Message, 
+                Errors = (exception as ValidationException)?.Errors,
+
+                Detailed = (_env.IsDevelopment()) ? exception.StackTrace : "" 
             };
 
             return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(result));
