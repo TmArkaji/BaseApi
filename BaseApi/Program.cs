@@ -2,6 +2,7 @@ using BaseApi.Configurations.ExceptionsHandler;
 using BaseApi.Data;
 using BaseApi.Interfaces;
 using BaseApi.Repositories;
+using BaseApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -88,6 +89,7 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSingleton<EmailService>();
 
 var app = builder.Build();
 
